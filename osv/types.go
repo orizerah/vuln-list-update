@@ -3,11 +3,10 @@ package osv
 type Ecosystem struct {
 	Dir string
 	URL string
-	// Filter is an optional predicate to drop individual Affected entries.
-	// If it returns true for a given Affected, that entry is excluded from
-	// the written output. Files that end up with no remaining Affected
-	// entries after filtering are skipped entirely.
-	Filter func(Affected) bool
+	// Exclude is an optional predicate to drop individual Affected entries.
+	// Entries for which it returns true are removed from the written output.
+	// Files that end up with no remaining Affected entries are skipped entirely.
+	Exclude func(Affected) bool
 }
 
 type Affected struct {

@@ -26,12 +26,17 @@ func TestOSVUpdater_Update(t *testing.T) {
 			name: "happy path",
 			wantFiles: []string{
 				filepath.Join("echo-osv", "pip", "ECHO-7db2-03aa-5591.json"),
+				// The OS entry ("Echo"/pytorch) is listed before the app entry
+				// ("Echo:PyPI"/torch). It must be dropped, and the file written
+				// under the remaining app package's directory.
+				filepath.Join("echo-osv", "torch", "ECHO-9320-f34e-79db.json"),
 			},
-			// OS-level Echo packages must be filtered out of OSV output;
-			// the openssh advisory only carries an "Echo" ecosystem entry
-			// and should be skipped entirely.
 			notWantFiles: []string{
+				// The openssh advisory only carries an "Echo" entry and should
+				// be skipped entirely.
 				filepath.Join("echo-osv", "openssh", "ECHO-003f-2632-599c.json"),
+				// Must not be placed under the dropped OS package's directory.
+				filepath.Join("echo-osv", "pytorch", "ECHO-9320-f34e-79db.json"),
 			},
 		},
 		{
@@ -60,9 +65,9 @@ func TestOSVUpdater_Update(t *testing.T) {
 
 			ecosystems := map[string]osv.Ecosystem{
 				"echo": {
-					Dir:    "echo-osv",
-					URL:    testURL,
-					Filter: echo.IsOSPackage,
+					Dir:     "echo-osv",
+					URL:     testURL,
+					Exclude: echo.IsOSPackage,
 				},
 			}
 

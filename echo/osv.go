@@ -19,9 +19,9 @@ const (
 
 var osvEcosystems = map[string]osv.Ecosystem{
 	"echo": {
-		Dir:    osvDir,
-		URL:    osvURL,
-		Filter: IsOSPackage,
+		Dir:     osvDir,
+		URL:     osvURL,
+		Exclude: IsOSPackage,
 	},
 }
 
