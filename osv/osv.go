@@ -87,7 +87,6 @@ func (db *Database) Update() error {
 			}
 
 			if len(parsed.Affected) == 0 {
-				log.Printf("[OSV] skipping %s: no affected packages", parsed.ID)
 				return nil
 			}
 
